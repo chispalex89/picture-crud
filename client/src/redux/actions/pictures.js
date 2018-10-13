@@ -20,8 +20,8 @@ export function addPicture(file, contact) {
     data.append('phone', contact.phone)
     data.append('file', file)
     return (dispatch) => {
-        /*dispatch(createPicture())
-        axios.post('/api/contacts', data, {
+        dispatch(createPicture())
+        fetch.post('/api/contacts', data, {
             headers: {
                 'content-type': 'multipart/form-data'
             }
@@ -29,7 +29,7 @@ export function addPicture(file, contact) {
             if(json.status === 201) dispatch(createPictureSuccess(json))
             else dispatch(createPictureFailure(json.statusText))
         })
-        .catch(err => dispatch(createPictureFailure(err)))*/
+        .catch(err => dispatch(createPictureFailure(err)))
     }
 }
 

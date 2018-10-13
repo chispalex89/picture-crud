@@ -1,9 +1,11 @@
-var express = require('express')
-var router = express.Router()
+const express = require('express')
+const router = express.Router()
 const AWS = require('aws-sdk')
-var s3 = new AWS.S3({
+const bucket = 'profile-pictures-baires-2'
+const region = 'us-east-2'
+const s3 = new AWS.S3({
   params: {
-    Bucket: 'profile-pictures-baires-2'
+    Bucket: bucket
   }
 })
 
@@ -26,18 +28,27 @@ const items = [
   }
 ]
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.status(200).json(items)
-})
-
-router.get('/test', (req, res, next) => {
+router.get('/', (req, res, next) => {
   s3.listObjects({}, (err, data) => {
     if(err) {
       console.error(err)
       throw err
     } else {
-      res.status(200).json(data)
+      const {Contents} = data
+      const pictures = Contents.map((item, index) => {
+        return {
+          src: `https://${bucket}.s3.${region}.amazonaws.com/${item.Key}`,
+          altText: item.Key,
+          caption: `Slide ${index+1}`
+        }
+      })
+
+      const thumbnails = pictures
+      const result = {
+        pictures,
+        thumbnails
+      }
+      res.status(200).json(result)
     }
   })
 })

@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import { Link } from "react-router-dom"
 import { css } from 'react-emotion'
 // First way to import
 import { ClipLoader } from 'react-spinners'
 import { connect } from 'react-redux'
-import {fetchPictures} from '../redux/actions/pictures'
 
 import {
   Carousel,
@@ -15,15 +13,8 @@ import {
   Row,
   Col,
   Card,
-  CardImg,
-  Jumbotron
+  CardImg
 } from 'reactstrap'
-
-const matchDispatchToProps = (dispatch) => {
-  return {
-    getPictures: () => dispatch(fetchPictures())
-  }
-}
 
 const mapStateToProps = (state) => {
   return {
@@ -75,14 +66,10 @@ class PictureSlider extends Component {
     this.setState({ activeIndex: newIndex })
   }
 
-  componentDidMount() {
-    this.props.getPictures()
-  }
-
   render() {
     const { activeIndex } = this.state
-    const {pictures} = this.props
-    const {isFetchingPictures, pictureList} = pictures
+    const { pictures } = this.props
+    const { isFetchingPictures, pictureList, thumbnailList } = pictures
 
     const slides = pictureList.map((item, index) => {
       return (
@@ -91,13 +78,13 @@ class PictureSlider extends Component {
           onExited={this.onExited}
           key={index}
         >
-          <img style={{width:'100%', margin:'auto'}} src={item.src} alt={item.altText} />
-          <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
+          <img style={{ width: '100%', margin: 'auto' }} src={item.src} alt={item.altText} />
+          <CarouselCaption captionHeader={item.caption} />
         </CarouselItem>
       )
     })
 
-    const thumbnails = pictureList.map((item, index) => (
+    const thumbnails = thumbnailList.map((item, index) => (
       <Col key={index} xs="12" xl="6">
         <Card onClick={() => this.goToIndex(index)} >
           <CardImg
@@ -112,16 +99,6 @@ class PictureSlider extends Component {
 
     return (
       <div>
-        <Jumbotron>
-          <Row>
-            <Col xs="12" sm="6">
-              <h2 className="display-3">Pictures</h2>
-            </Col>
-            <Col style={{ textAlign: 'right' }} xs="12" sm="6">
-              <Link to={'/create'} className={'btn btn-success btn-lg'}>Add Picture</Link>
-            </Col>
-          </Row>
-        </Jumbotron>
         <ClipLoader
           className={override}
           sizeUnit={"px"}
@@ -151,4 +128,4 @@ class PictureSlider extends Component {
   }
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(PictureSlider)
+export default connect(mapStateToProps)(PictureSlider)

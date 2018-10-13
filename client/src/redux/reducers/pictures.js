@@ -5,7 +5,8 @@ const initialState = {
     isCreating: false,
     isCreated: false,
     errorMessage: '',
-    pictureList: []
+    pictureList: [],
+    thumbnailList: [],
 }
 
 export default function contactReducer(state = initialState, action) {
@@ -14,19 +15,22 @@ export default function contactReducer(state = initialState, action) {
         return {
             ...state,
             isFetchingPictures: true,
-            pictureList: []
+            pictureList: [],
+            thumbnailList: []
         }
         case FETCHING_PICTURE_LIST_SUCCESS:
         return {
             ...state,
             isFetchingPictures: false,
-            pictureList: action.data
+            pictureList: action.data.pictures,
+            thumbnailList: action.data.thumbnails
         }
         case FETCHING_PICTURE_LIST_FAILURE: 
         return {
             ...state,
             isFetchingPictures: false,
-            pictureList: []
+            pictureList: [],
+            thumbnailList: []
         }
         case CREATE_PICTURE:
         return {
