@@ -1,5 +1,12 @@
 var express = require('express')
 var router = express.Router()
+const AWS = require('aws-sdk')
+var s3 = new AWS.S3({
+  params: {
+    Bucket: 'profile-pictures-baires-2'
+  }
+})
+
 
 const items = [
   {
@@ -20,8 +27,19 @@ const items = [
 ]
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.status(200).json(items)
+})
+
+router.get('/test', (req, res, next) => {
+  s3.listObjects({}, (err, data) => {
+    if(err) {
+      console.error(err)
+      throw err
+    } else {
+      res.status(200).json(data)
+    }
+  })
 })
 
 module.exports = router
